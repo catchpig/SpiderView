@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SpiderView spiderView = findViewById(R.id.spider);
-        double[] values = {0.3,0.8,0.5,1,0.6,0.9};
-        spiderView.setValues(values);
+//        double[] values = {0.3,0.8,0.5,1,0.6,0.9};
+//        spiderView.setValue(values);
     }
 }

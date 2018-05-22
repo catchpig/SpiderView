@@ -12,9 +12,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import zhuazhu.spider.R;
 
 /**
@@ -25,8 +22,8 @@ public class SpiderView extends View {
      * 线的数量
      */
     private int mLineCount = 3;
-    private int mAreaCount = mLineCount *2;
-    private int mAngle = 360/(mAreaCount);
+    private int mAreaCount;
+    private float mAngle;
     private double[] mValues;
     private int mNetCount = 4;
     /**
@@ -58,6 +55,8 @@ public class SpiderView extends View {
      */
     private int mAreaColor = Color.parseColor("#57565865");
 
+    private Point[] mPoints;
+
     private Paint mPaintLine;
     private Paint mPaintNet;
     private Paint mPaintPoint;
@@ -87,6 +86,8 @@ public class SpiderView extends View {
         mPointColor = array.getColor(R.styleable.SpiderView_point_color,mPointColor);
         mAreaColor = array.getColor(R.styleable.SpiderView_area_color,mAreaColor);
         String value = array.getString(R.styleable.SpiderView_value);
+        mAreaCount = mLineCount *2;
+        mAngle = (float) 360/mAreaCount;
         if(value!=null&&(!"".equals(value))){
             String[] strs = value.split(",");
             mValues = new double[mAreaCount];
@@ -95,6 +96,8 @@ public class SpiderView extends View {
                 mValues[i] = v;
             }
         }
+
+        array.recycle();
     }
     private void initPaint(){
         mPaintLine = new Paint();
@@ -118,7 +121,7 @@ public class SpiderView extends View {
         mPaintArea.setStrokeWidth(4);
 
     }
-    public void setValues(@FloatRange(from = 0.0,to = 1.0) double ...values){
+    public void setValue(@FloatRange(from = 0.0,to = 1.0) double ...values){
         mValues = values;
         invalidate();
     }
@@ -131,7 +134,7 @@ public class SpiderView extends View {
         int height = getHeight();
         int centerPointX = width/2;
         int centerPointY = height/2;
-        mMinSize = Math.min(centerPointX,centerPointY);
+        mMinSize = (int) (Math.min(centerPointX,centerPointY)-mPointSize*2);
         int saveCount = canvas.saveLayer(0,0,width,height,null,Canvas.ALL_SAVE_FLAG);
         canvas.translate(centerPointX,centerPointY);
         drawLine(canvas);
@@ -153,19 +156,20 @@ public class SpiderView extends View {
         double sin = Math.sin(Math.toRadians(mAngle));
         for (int i = 0; i < mAreaCount; i++) {
             for (int j = mNetCount; j > 0; j--) {
-                int size = mMinSize*j/mNetCount;
-                int x = (int) (cos*size);
-                int y = (int) (sin*size);
+                float size = mMinSize*j/mNetCount;
+                float x = (float) (cos*size);
+                float y = (float) (sin*size);
                 canvas.drawLine(-size,0,-x,-y,mPaintNet);
             }
             canvas.rotate(-mAngle);
         }
     }
-    private Point[] mPoints = new Point[mAreaCount];
+
     private void drawPoint(Canvas canvas){
         if(mValues==null){
             return;
         }
+        mPoints = new Point[mAreaCount];
         for (int i = 0; i < mAreaCount; i++) {
             double size = (int) (mValues[i]*mMinSize);
             double cos = Math.cos(Math.toRadians(mAngle*i));
