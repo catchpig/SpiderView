@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SpiderView">
+        <!--维度的值(数字在0到1之间),值的个数为line_count*2,以","号隔开-->
+        <attr name="value" format="string"></attr>
+        <!--线的条数-->
+        <attr name="line_count" format="integer"></attr>
+        <!--网的个数-->
+        <attr name="net_count" format="integer"></attr>
+        <!--线的宽度-->
+        <attr name="line_width" format="dimension"></attr>
+        <!--网的宽度-->
+        <attr name="net_width" format="dimension"></attr>
+        <!--点的大小-->
+        <attr name="point_size" format="dimension"></attr>
+        <!--线的颜色-->
+        <attr name="line_color" format="color"></attr>
+        <!--网的颜色-->
+        <attr name="net_color" format="color"></attr>
+        <!--点的颜色-->
+        <attr name="point_color" format="color"></attr>
+        <!--遮罩的颜色-->
+        <attr name="area_color" format="color"></attr>
+    </declare-styleable>
+</resources>
